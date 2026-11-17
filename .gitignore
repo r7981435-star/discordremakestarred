@@ -1,6 +1,11 @@
 # Dependencies
 node_modules/
 
+# Gradle
+.gradle/
+build/
+**/build/
+
 # Local databases
 *.db
 *.sqlite
