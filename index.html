@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Discord Clone | Not Donut SMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="auth-container hidden">
+  <div class="auth-box">
+    <h1>Welcome back!</h1>
+    <p>We're so excited to see you again!</p>
+    
+    <form class="auth-form" onsubmit="event.preventDefault(); handleAuth();" novalidate>
+      <label>AUTHENTICATION KEY</label>
+      <input type="text" id="auth-user-key" name="auth_user_key" placeholder="Enter username" autocomplete="off" autocapitalize="none" spellcheck="false" />
+      
+      <label>SECURITY CODE</label>
+      <input type="text" id="auth-pass-code" name="auth_pass_code" placeholder="Enter password" autocomplete="off" style="-webkit-text-security: disc;" />
+      
+      <button type="submit" id="auth-submit">Log In</button>
+      
+      <div class="auth-switch">
+        <span id="auth-switch-text">Need an account?</span>
+        <a href="#" onclick="toggleAuthMode(event)">Register</a>
+      </div>
+      <div id="auth-error" class="error-msg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div class="app hidden" id="app-screen">
+  <nav class="server-list">
+    <div class="server-icon home active" title="Direct Messages">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.7 3.7l-16 6c-.6.2-.6 1.1 0 1.3l4.3 1.4 2 6.4c.2.6 1 .8 1.4.3l2.3-2.3 4.2 3.1c.5.4 1.2.1 1.3-.5l3.3-14.2c.1-.8-.7-1.5-1.5-1.5z"/></svg>
+    </div>
+    <div class="separator"></div>
+    <div class="server-icon" title="Not Donut SMP Website (Click to open)" style="background: #ff3366; color: #fff;" onclick="window.location.href='website/'">N</div>
+    <div class="server-icon add" title="Add a Server">+</div>
+  </nav>
+
+  <aside class="sidebar">
+    <div class="server-header">
+      <h1>Not Donut SMP</h1>
+      <span class="chevron">▼</span>
+    </div>
+    
+    <div class="channel-group">
+      <div class="channel-category">Information</div>
+      <a href="#" class="channel active" data-channel="welcome"><span class="hash">#</span> welcome</a>
+      <a href="#" class="channel" data-channel="general"><span class="hash">#</span> general</a>
+      <a href="#" class="channel" data-channel="announcements"><span class="hash">#</span> announcements</a>
+    </div>
+
+    <div class="user-panel">
+      <div class="user-info">
+        <div class="avatar small" id="user-avatar" style="background-color: #ff3366;">?</div>
+        <div class="user-details">
+          <span class="username" id="user-display-name">Loading...</span>
+          <span class="status">Online</span>
+        </div>
+      </div>
+      <div class="user-controls">
+        <span title="Logout" onclick="logout()" style="cursor:pointer; font-size: 18px;">🚪</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="chat-area">
+    <header class="chat-header">
+      <div class="chat-title">
+        <span class="hash large">#</span>
+        <h2 id="current-channel">welcome</h2>
+      </div>
+    </header>
+
+    <div class="chat-messages" id="chat-container"></div>
+
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <span class="plus-icon">+</span>
+        <input type="text" id="message-input" placeholder="Message #welcome" autocomplete="off" />
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Discord Clone</title>
+<title>Discord Clone | Not Donut SMP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,10 +19,10 @@
     
     <form class="auth-form" onsubmit="event.preventDefault(); handleAuth();" novalidate>
       <label>AUTHENTICATION KEY</label>
-      <input type="text" id="auth-user-key" name="auth_user_key" autocomplete="off" autocapitalize="none" spellcheck="false" />
+      <input type="text" id="auth-user-key" name="auth_user_key" placeholder="Enter username" autocomplete="off" autocapitalize="none" spellcheck="false" />
       
       <label>SECURITY CODE</label>
-      <input type="text" id="auth-pass-code" name="auth_pass_code" autocomplete="off" style="-webkit-text-security: disc;" />
+      <input type="text" id="auth-pass-code" name="auth_pass_code" placeholder="Enter password" autocomplete="off" style="-webkit-text-security: disc;" />
       
       <button type="submit" id="auth-submit">Log In</button>
       
@@ -42,7 +42,7 @@
       <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.7 3.7l-16 6c-.6.2-.6 1.1 0 1.3l4.3 1.4 2 6.4c.2.6 1 .8 1.4.3l2.3-2.3 4.2 3.1c.5.4 1.2.1 1.3-.5l3.3-14.2c.1-.8-.7-1.5-1.5-1.5z"/></svg>
     </div>
     <div class="separator"></div>
-    <div class="server-icon" title="Not Donut SMP" style="background: #ff3366; color: #fff;">N</div>
+    <div class="server-icon" title="Not Donut SMP Website (Click to open)" style="background: #ff3366; color: #fff;" onclick="window.location.href='../website/'">N</div>
     <div class="server-icon add" title="Add a Server">+</div>
   </nav>
 
@@ -56,6 +56,7 @@
       <div class="channel-category">Information</div>
       <a href="#" class="channel active" data-channel="welcome"><span class="hash">#</span> welcome</a>
       <a href="#" class="channel" data-channel="general"><span class="hash">#</span> general</a>
+      <a href="#" class="channel" data-channel="announcements"><span class="hash">#</span> announcements</a>
     </div>
 
     <div class="user-panel">
