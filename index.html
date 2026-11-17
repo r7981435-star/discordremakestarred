@@ -1,97 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Discord Clone | Not Donut SMP</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Not Donut SMP | The Ultimate Hardcore Minecraft Experience</title>
+  <meta name="description" content="Not Donut SMP is a premier Minecraft Lifesteal and Economy network. Steal hearts, build empires, and conquer the leaderboards.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Ambient Floating Particles -->
+  <canvas id="particles-canvas"></canvas>
 
-<!-- AUTH SCREEN -->
-<div id="auth-screen" class="auth-container hidden">
-  <div class="auth-box">
-    <h1>Welcome back!</h1>
-    <p>We're so excited to see you again!</p>
-    
-    <form class="auth-form" onsubmit="event.preventDefault(); handleAuth();" novalidate>
-      <label>AUTHENTICATION KEY</label>
-      <input type="text" id="auth-user-key" name="auth_user_key" placeholder="Enter username" autocomplete="off" autocapitalize="none" spellcheck="false" />
-      
-      <label>SECURITY CODE</label>
-      <input type="text" id="auth-pass-code" name="auth_pass_code" placeholder="Enter password" autocomplete="off" style="-webkit-text-security: disc;" />
-      
-      <button type="submit" id="auth-submit">Log In</button>
-      
-      <div class="auth-switch">
-        <span id="auth-switch-text">Need an account?</span>
-        <a href="#" onclick="toggleAuthMode(event)">Register</a>
-      </div>
-      <div id="auth-error" class="error-msg"></div>
-    </form>
-  </div>
-</div>
+  <div class="content-wrapper">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container nav-container">
+        <a href="#" class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24">
+              <!-- Donut SVG with bite -->
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.85-.5-3.58-1.39-5.07l-2.06 1.19c.6 1.13.95 2.44.95 3.88 0 4.14-3.36 7.5-7.5 7.5S4.5 16.14 4.5 12 7.86 4.5 12 4.5c1.44 0 2.75.35 3.88.95l1.19-2.06C15.58 2.5 13.85 2 12 2zm0 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+          </div>
+          <span>NOT DONUT <span class="gradient-accent">SMP</span></span>
+        </a>
 
-<!-- APP SCREEN -->
-<div class="app hidden" id="app-screen">
-  <nav class="server-list">
-    <div class="server-icon home active" title="Direct Messages">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.7 3.7l-16 6c-.6.2-.6 1.1 0 1.3l4.3 1.4 2 6.4c.2.6 1 .8 1.4.3l2.3-2.3 4.2 3.1c.5.4 1.2.1 1.3-.5l3.3-14.2c.1-.8-.7-1.5-1.5-1.5z"/></svg>
-    </div>
-    <div class="separator"></div>
-    <div class="server-icon" title="Not Donut SMP Website (Click to open)" style="background: #ff3366; color: #fff;" onclick="window.location.href='website/'">N</div>
-    <div class="server-icon add" title="Add a Server">+</div>
-  </nav>
+        <ul class="nav-links">
+          <li><a href="#gamemodes" class="nav-link">Gamemodes</a></li>
+          <li><a href="#ranks" class="nav-link">Store & Ranks</a></li>
+          <li><a href="#faq" class="nav-link">FAQ & Rules</a></li>
+        </ul>
 
-  <aside class="sidebar">
-    <div class="server-header">
-      <h1>Not Donut SMP</h1>
-      <span class="chevron">▼</span>
-    </div>
-    
-    <div class="channel-group">
-      <div class="channel-category">Information</div>
-      <a href="#" class="channel active" data-channel="welcome"><span class="hash">#</span> welcome</a>
-      <a href="#" class="channel" data-channel="general"><span class="hash">#</span> general</a>
-      <a href="#" class="channel" data-channel="announcements"><span class="hash">#</span> announcements</a>
-    </div>
-
-    <div class="user-panel">
-      <div class="user-info">
-        <div class="avatar small" id="user-avatar" style="background-color: #ff3366;">?</div>
-        <div class="user-details">
-          <span class="username" id="user-display-name">Loading...</span>
-          <span class="status">Online</span>
+        <div class="nav-actions">
+          <div class="server-badge">
+            <span class="pulse-dot"></span>
+            <span id="nav-player-count">1,842 Online</span>
+          </div>
+          <a href="hello.txt" download="hello.txt" class="btn btn-glass" style="padding: 0.5rem 1rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+          </a>
+          <a href="https://discord.gg" target="_blank" rel="noreferrer" class="btn btn-discord">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+            Discord
+          </a>
         </div>
-      </div>
-      <div class="user-controls">
-        <span title="Logout" onclick="logout()" style="cursor:pointer; font-size: 18px;">🚪</span>
-      </div>
-    </div>
-  </aside>
-
-  <main class="chat-area">
-    <header class="chat-header">
-      <div class="chat-title">
-        <span class="hash large">#</span>
-        <h2 id="current-channel">welcome</h2>
       </div>
     </header>
 
-    <div class="chat-messages" id="chat-container"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="tag-banner">
+          <span>⚡ Season 4: Bloodlust & Overworld Abyss</span>
+        </div>
 
-    <div class="chat-input-area">
-      <div class="input-wrapper">
-        <span class="plus-icon">+</span>
-        <input type="text" id="message-input" placeholder="Message #welcome" autocomplete="off" />
+        <h1 class="gradient-text">
+          DEFINITELY NOT<br>YOUR AVERAGE DONUT.
+        </h1>
+
+        <p class="hero-subtitle">
+          The most merciless Hardcore Lifesteal SMP. Steal hearts from rivals, dominate the player-driven economy, unlock custom artifacts, and build your kingdom.
+        </p>
+
+        <!-- Server IP Box -->
+        <div class="ip-card-wrapper">
+          <div class="ip-box copy-ip-trigger" title="Click to copy server IP">
+            <div class="ip-text-group">
+              <div class="ip-label">Server IP Address</div>
+              <div class="ip-address">notdonutsmp.sadhost.com</div>
+            </div>
+            <button class="copy-btn copy-ip-trigger">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy IP</span>
+            </button>
+          </div>
+
+          <div class="ip-subtext">
+            <span>Supported: <strong class="pill-badge">Java 1.18 - 1.21+</strong></span>
+            <span>Bedrock Port: <strong class="pill-badge">19132</strong></span>
+          </div>
+
+          <!-- Hero Download CTA -->
+          <div style="margin-top: 1rem;">
+            <a href="hello.txt" download="hello.txt" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1.05rem; gap: 0.65rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Download</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Stats Ribbon -->
+        <div class="stats-ribbon">
+          <div class="stat-item">
+            <div class="stat-number" id="player-count">1,842</div>
+            <div class="stat-title">Active Warriors</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">48,200+</div>
+            <div class="stat-title">Hearts Stolen</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">0.001%</div>
+            <div class="stat-title">Uptime & Stability</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">Season 4</div>
+            <div class="stat-title">Fresh Realm</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </main>
-</div>
+    </section>
 
-<script src="script.js"></script>
+    <!-- Gamemodes Section -->
+    <section id="gamemodes" class="container">
+      <div class="section-header">
+        <div class="section-tag">Play Your Way</div>
+        <h2 class="section-title">CHOOSE YOUR REALM</h2>
+        <p class="section-desc">Experience handcrafted gamemodes built for competition, survival, and limitless progression.</p>
+      </div>
+
+      <div class="modes-grid">
+        <!-- Mode 1: Lifesteal -->
+        <div class="mode-card" style="--card-accent: #f43f5e;">
+          <div class="mode-icon" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+          <span class="mode-badge" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">Most Brutal</span>
+          <h3 class="mode-title">Lifesteal SMP</h3>
+          <p class="mode-description">
+            Every kill rewards you with a heart. Every death costs you one. Reach 0 hearts and face banishment until a teammate crafts a Revive Beacon.
+          </p>
+          <ul class="mode-perks">
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Custom Heart Crafting & Shards
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Meteor Events & Supply Drops
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              No Crystal PvP (Pure Sword & Bow Mechanics)
+            </li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">Join Lifesteal</button>
+        </div>
+
+        <!-- Mode 2: Economy & Claims -->
+        <div class="mode-card" style="--card-accent: #f59e0b;">
+          <div class="mode-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+            </svg>
+          </div>
+          <span class="mode-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">Player Driven</span>
+          <h3 class="mode-title">Tycoon Economy</h3>
+          <p class="mode-description">
+            Build shops, trade on the global stock auction house, claim grief-proof lands, and assemble economic empires without griefing worries.
+          </p>
+          <ul class="mode-perks">
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Live Player Auction House & Chest Shops
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Full Land Claim Protections
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Custom Jobs, Skills, & Spawners
+            </li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">Join Economy</button>
+        </div>
+
+        <!-- Mode 3: Duels -->
+        <div class="mode-card" style="--card-accent: #06b6d4;">
+          <div class="mode-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.5 13.5L16 12l5.5 5.5-1.5 1.5-5.5-5.5zm-5 0l-5.5 5.5 1.5 1.5 5.5-5.5-1.5-1.5zm6.5-6.5L14.5 8.5 20 14l1.5-1.5-5.5-5.5zm-8 0L2.5 12.5 4 14l5.5-5.5-1.5-1.5z"/>
+            </svg>
+          </div>
+          <span class="mode-badge" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">Ranked Arena</span>
+          <h3 class="mode-title">Ranked Duels</h3>
+          <p class="mode-description">
+            Warm up before venturing into the wilderness. Battle players in 1v1, 2v2, Nodebuff, Crystal, and custom SMP loadout arenas with instant respawn.
+          </p>
+          <ul class="mode-perks">
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Competitive Elo Leaderboards & Titles
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Custom Kit Editor & Unranked Practice
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              Sub-millisecond Hit Registration
+            </li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">Fight in Duels</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ranks Showcase Section -->
+    <section id="ranks" class="container">
+      <div class="section-header">
+        <div class="section-tag">Support The Server</div>
+        <h2 class="section-title">UPGRADE YOUR RANK</h2>
+        <p class="section-desc">Unlock cosmetic auras, extra vault storage, queue priority, and monthly care packages.</p>
+      </div>
+
+      <div class="ranks-grid">
+        <!-- Rank 1: Glazed -->
+        <div class="rank-card">
+          <div class="rank-title" style="color: #fb7185;">[GLAZED]</div>
+          <div class="rank-price">$4.99</div>
+          <ul class="rank-features">
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 2x Player Vaults (/pv 1-2)</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Pink Chat Color & Prefix</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 3 Set Homes (/sethome)</li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">View Perks</button>
+        </div>
+
+        <!-- Rank 2: Sprinkles (Featured) -->
+        <div class="rank-card featured">
+          <div class="featured-ribbon">Most Popular</div>
+          <div class="rank-title" style="color: #ec4899;">[SPRINKLES]</div>
+          <div class="rank-price">$14.99</div>
+          <ul class="rank-features">
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 5x Player Vaults (/pv 1-5)</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Priority Queue Bypass</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Particle Trail: Rainbow Halo</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Access to /fly in claims</li>
+          </ul>
+          <button class="btn btn-primary copy-ip-trigger">Claim Rank</button>
+        </div>
+
+        <!-- Rank 3: Donut Slayer -->
+        <div class="rank-card">
+          <div class="rank-title" style="color: #a855f7;">[SLAYER]</div>
+          <div class="rank-price">$29.99</div>
+          <ul class="rank-features">
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 10x Player Vaults (/pv 1-10)</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Slayer Tag & Animated Cape</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Instant Auto-Smelt & Condense</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 10 Set Homes</li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">View Perks</button>
+        </div>
+
+        <!-- Rank 4: Immortal -->
+        <div class="rank-card">
+          <div class="rank-title" style="color: #f59e0b;">[IMMORTAL]</div>
+          <div class="rank-price">$49.99</div>
+          <ul class="rank-features">
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Unlimited Player Vaults</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Custom Golden Glow & Kill Effect</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> Maximum Auction Slots (25)</li>
+            <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> 1x Free Monthly Season Crate</li>
+          </ul>
+          <button class="btn btn-glass copy-ip-trigger">View Perks</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Discord CTA Banner -->
+    <section class="container">
+      <div class="discord-banner">
+        <div class="discord-content">
+          <h3>JOIN OUR 15,000+ DISCORD COMMUNITY</h3>
+          <p>Get instant patch notes, participate in weekly $250 PayPal giveaways, report bug/hackers, and chat with staff 24/7.</p>
+        </div>
+        <a href="https://discord.gg" target="_blank" rel="noreferrer" class="btn btn-discord" style="font-size: 1.05rem; padding: 0.9rem 1.8rem;">
+          Join Discord Server
+        </a>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="container faq-section">
+      <div class="section-header">
+        <div class="section-tag">Got Questions?</div>
+        <h2 class="section-title">FREQUENTLY ASKED QUESTIONS</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I connect from Minecraft Bedrock (Console, Mobile, Windows 10)?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            Open Minecraft Bedrock Edition, navigate to the Servers tab, click "Add Server", and enter <strong>notdonutsmp.sadhost.com</strong> as the Server Address and <strong>19132</strong> as the Port.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What happens when I lose all my hearts on Lifesteal?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            When your health drops to 0 hearts, you are temporarily eliminated for 24 hours. However, your clan or friends can revive you at any time by crafting a Revive Beacon and placing it at the altar!
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is Griefing or Stealing allowed?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            On the <strong>Lifesteal SMP</strong>, raiding, griefing, and stealing are 100% permitted outside of safe zones! On our <strong>Economy Realm</strong>, griefing is strictly prohibited and all claims are 100% protected.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Are hacked clients or macros allowed?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            No. We run a custom machine-learning anticheat backed by active staff. Any form of cheating, x-ray, auto-clickers (>18 CPS), or unapproved mods will result in an immediate hardware ban.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a href="#" class="brand">
+              <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="#fff">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.85-.5-3.58-1.39-5.07l-2.06 1.19c.6 1.13.95 2.44.95 3.88 0 4.14-3.36 7.5-7.5 7.5S4.5 16.14 4.5 12 7.86 4.5 12 4.5c1.44 0 2.75.35 3.88.95l1.19-2.06C15.58 2.5 13.85 2 12 2zm0 7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+              </div>
+              <span>NOT DONUT <span class="gradient-accent">SMP</span></span>
+            </a>
+            <p>The premier Minecraft competitive network. Built by players, loved by champions.</p>
+          </div>
+
+          <div style="display: flex; gap: 3rem;">
+            <div>
+              <h4 style="color: #fff; margin-bottom: 0.8rem; font-size: 0.95rem;">Navigation</h4>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><a href="#gamemodes" class="nav-link">Gamemodes</a></li>
+                <li><a href="#ranks" class="nav-link">Ranks Store</a></li>
+                <li><a href="#faq" class="nav-link">Server FAQ</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color: #fff; margin-bottom: 0.8rem; font-size: 0.95rem;">Connect</h4>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><a href="https://discord.gg" target="_blank" rel="noreferrer" class="nav-link">Discord</a></li>
+                <li><a href="#" class="nav-link copy-ip-trigger">Copy IP</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-disclaimer">
+          <p>© 2026 Not Donut SMP. All rights reserved.</p>
+          <p style="margin-top: 0.25rem;">Not Donut SMP is NOT an official Minecraft service and is not approved by or associated with Mojang, Microsoft, or Donut SMP.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="#10b981">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+    </svg>
+    <span class="toast-msg">Server IP copied to clipboard!</span>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
